@@ -1,0 +1,49 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'css/hyper.css'%}">
+
+<div class="dash-content">
+    <div class="overview">
+        <div class="title">
+            <i class="uil uil-tachometer-fast-alt"></i>
+            <span class="text">Liste de ventes</span>
+        </div>
+
+    </div>
+
+    <!-- Ajout d'un bouton pour imprimer les données au format Excel -->
+
+    <div class="container">
+        <div class="scrollable-table">
+            <h2>Rapport de Ventes et Dépenses</h2>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Mois</th>
+
+                        <th>gains</th>
+                        <th>voir</th>
+                    </tr>
+                </thead>
+                <tbody>
+{% for resultat in resultats %}
+
+<tr>
+    <td>gains du {{ resultat.mois }}ème mois, de{{ resultat.annee }}</td>
+    <td>{{ resultat.difference }} gnf</td>
+    <td><a class="btn" href="{% url 'details' pk=resultat.mois_annee %}">👀</a></td>
+</tr>
+{% endfor %}
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

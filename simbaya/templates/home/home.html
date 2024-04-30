@@ -1,0 +1,113 @@
+{% extends 'main.html' %}
+{% block content %}
+<!-- Ajoutez ceci dans votre modèle de base (base.html) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="dash-content">
+    <div class="overview">
+        <div class="title">
+            <i class="uil uil-tachometer-fast-alt"></i>
+            <span class="text">Tableau de bord</span>
+
+        </div>
+
+        <div class="boxes">
+            <div class="box box1">
+                <i class=" uil-coins"></i>
+                <span class="text">Rentabilité</span>
+                <span class="number">{{renta|floatformat:2}}pts/kg</span>
+            </div>
+
+
+                <a  href="{% url 'rapport'%}"  class="box box2">
+                <i class=" uil-usd-circle"></i>
+                <span class="text">Rapport</span>
+                <span class="number">{{rapport}} gnf</span>
+                </a>
+
+
+            <div class="box box3">
+                <i class="uil uil-abacus"></i>
+                <span class="text">Rouleaux dispo</span>
+                <span class="number">{{stock_r}}</span>
+            </div>
+
+            <div class="box box4">
+                <i class="uil uil-archive"></i>
+                <span class="text">Emballage dispo</span>
+                <span class="number">{{stock_e}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display: flex;flex-direction: row;">
+    <div class="chart">
+        <canvas id="ventesChart" width="400" height="400"></canvas>
+    </div>
+
+    <div class="chart">
+        <canvas id="prodChart" width="400" height="400"></canvas>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctxVentes = document.getElementById('ventesChart').getContext('2d');
+
+        var ventesData = {
+            labels: [{% for vente in ventes_par_voiture %}'{{ vente.Vehicule }}',{% endfor %}],
+            datasets: [{
+                label: 'Ventes par voiture',
+                data: [{% for vente in ventes_par_voiture %}{{ vente.total_ventes }},{% endfor %}],
+                backgroundColor: [{% for _ in ventes_par_voiture %}'rgba(75, 192, 192, 0.7)',{% endfor %}],
+                borderColor: [{% for _ in ventes_par_voiture %}'rgba(75, 192, 192, 1)',{% endfor %}],
+                borderWidth: 1
+            }]
+        };
+
+        var ventesChart = new Chart(ctxVentes, {
+            type: 'bar',
+            data: ventesData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctxProd = document.getElementById('prodChart').getContext('2d');
+
+        var prodData = {
+            labels: [{% for i in rentabilite %}'{{ i.date }}',{% endfor %}],
+            datasets: [{
+                label: 'rentabilité',
+                data: [{% for i in rentabilite %}{{ i.renta }},{% endfor %}],
+                borderWidth: 1
+            }]
+        };
+
+        var prodChart = new Chart(ctxProd, {
+            type: 'line',
+            data: prodData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+    <!-- Canvas pour le graphique -->
+
+
+
+
+{% endblock %}

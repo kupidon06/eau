@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
+            <div class="mb-4">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-300">Ajout de dépenses</h3>
+            </div>
+            <form action="" method="post" class="space-y-6">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded">Enregistrer</button>
+            </form>
+        </div>
+
+        <div class="mt-4 flex justify-between items-center bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
+            <a href="{% url 'list_depense_day' %}" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded">Voir la liste</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

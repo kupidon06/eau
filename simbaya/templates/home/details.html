@@ -1,0 +1,93 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'css/hyper.css' %}">
+
+<div class="dash-content">
+    <div class="overview">
+        <div class="title">
+            <i class="uil uil-tachometer-fast-alt"></i>
+            <span class="text">details</span>
+
+            <!-- Formulaire de recherche -->
+            <form method="GET" action="{% url 'ma_vues' %}">
+                <input type="text" name="q" placeholder="Rechercher...">
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="vente">
+            <table class="table table-striped " class="scrollable-table">
+                <h4 style="text-align: center;">Ventes du mois</h4>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Vente Totale</th>
+                        <th>Voir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in vente %}
+                        {% if i.total_vente != 0 %}
+                            <tr>
+                                <td>{{ i.date }}</td>
+                                <td>{{ i.total_vente }} GNF</td>
+                                <!-- Lien pour voir les détails des ventes par jour -->
+                                <td><a class='btn btn-info' href="{% url 'list_vente' i.date %}" >👀</a></td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        
+
+            <div style="margin-top: 3rem;" class="details">
+                <h4 style="text-align: center;">Synthèse</h4>
+                <table class="table table-striped">
+                    <tr>
+                        <td>Total des ventes du mois</td>
+                        <td>{{ mois_vente }} GNF</td>
+                    </tr>
+                    <tr>
+                        <td>Total des dépenses du mois</td>
+                        <td>{{ mois_depense }} GNF</td>
+                    </tr>
+                    <tr>
+                        <td>Bénéfice du mois</td>
+                        <td>{{ benef }} GNF</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="depense">
+            <h4 style="text-align: center;">Dépenses du mois</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Dépense Totale</th>
+                        <th>Voir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in depenses %}
+                        <tr>
+                            <td>{{ i.date }}</td>
+                            <td>{{ i.total_depense }} GNF</td>
+                            <!-- Lien pour voir les détails des dépenses par jour -->
+                            <td><a href="{% url 'list_depenses' i.date %}" class='btn btn-info'>👀</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
