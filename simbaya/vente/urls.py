@@ -29,4 +29,28 @@ urlpatterns = [
     # Liste des ventes à crédit pour un véhicule spécifique
     path('liste_credit/<str:pk>/', views.list_credit, name='list_credit'),
 
+    #les voitures
+    path('car/', views.add_car, name='ajout de voiture'),
+
+    path('update_car/<str:pk>/', views.update_car, name='modification de voiture'),
+
+    path('remove_car/<str:pk>/', views.remove_car, name='suprimer de voiture'),
+
+    path('liste_car/', views.list_car, name='list_car'),
+
+    #le prix
+    #les voitures
+    path('prix/', views.add_price, name='add_price'),
+
+
+    #les livraisons
+
+    # Tableau récapitulatif des livraison  par moi
+    path('liste_mois/', views.tableau_mensuel_livraison, name='list_mois'),
+
+    path('liste_livraison/<str:pk>/', views.list_livraison, name='list_livraison'),
+    path('print_livraison/<str:pk>/', views.print_livraison, name='print_livraison'),
+
+
+
 ]

@@ -12,13 +12,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-import environ
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-env=environ.Env()
-environ.Env.read_env(env_file=str(BASE_DIR/'simbaya'/'.env'))
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -29,11 +28,11 @@ environ.Env.read_env(env_file=str(BASE_DIR/'simbaya'/'.env'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = 'django-insecure-2!x^nx%*g+d02&!ewq%f+x=ug%*#x!z9oc7ojk-$i2e!wc!_5e'
 
-DEBUG = env.bool('DEBUG',False)
+DEBUG = False
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = ['simbaya.pythonanywhere.com']
 
 # Application definition
 
@@ -89,8 +88,12 @@ WSGI_APPLICATION = 'simbaya.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'simbaya$eausimbaya',
+        'USER': 'simbaya',
+        'PASSWORD': 'moussa2006.',
+        'HOST': 'simbaya.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
     }
 }
 

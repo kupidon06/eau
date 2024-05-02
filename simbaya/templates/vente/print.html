@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Fiche journalière</title>
 </head>
 <body>
@@ -13,59 +12,46 @@
             font-family: 'Arial', sans-serif;
             margin: 10px;
         }
-
         .pay-slip {
-
             padding: 20px;
             margin: 20px auto;
             max-width: 1200px;
-
         }
-
         .header {
             text-align: center;
             margin-bottom: 20px;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-
         }
-
         .header h4 {
             margin: 0;
             text-align: left;
         }
-
         .header p {
             margin: 5px 0;
             flex:1;
         }
-
         .vert {
             color: rgb(14, 17, 14);
         }
-
         .table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
-
         .table th, .table td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
-
         .table th {
             background-color: #f2f2f2;
         }
-
         .footer {
             margin-top: 20px;
             text-align: right;
         }
-
         h5 {
             margin-top: 20px;
         }
@@ -73,19 +59,20 @@
 
 <div class="pay-slip">
     <div class="header">
-        <h4>Entreprise fatim distribution sarlu <br> propreietaire exclusive<br>622-22-07-22</h4>
-        <p><strong>Date:</strong> {{date}}</p>
+        <h4>Entreprise fatim distribution sarlu <br> propriétaire exclusive<br>622-22-07-22</h4>
+        <p><strong>Date:</strong> {{ date }}</p>
         <div class="vert">
-        <p><strong>initiale: {{initial}}</strong></p>
-        <p><strong>Produit: {{production}}</strong></p>
-        <p><strong>A l'usine: {{usine}}</strong></p>
-    </div>
+            <p><strong>Initiale: {{ initial }}</strong></p>
+            <p><strong>Produit: {{ production }}</strong></p>
+            <p><strong>À l'usine: {{ usine }}</strong></p>
+        </div>
     </div>
 
+    <h5>Ventes du jour</h5>
     <table class="table">
         <thead>
             <tr>
-                <th>Vehicule</th>
+                <th>Véhicule</th>
                 <th>Vente</th>
                 <th>Sortie</th>
                 <th>Vendu</th>
@@ -104,29 +91,30 @@
                     <td>{{ vente.retourner }}</td>
                     <td>{{ vente.credit }} GNF</td>
                     <td>{{ vente.Somme_gnf }} GNF</td>
-                    <!-- Liens pour modifier et supprimer -->
                 </tr>
             {% endfor %}
-                    <td>total:</td>
-                    <td>{{total_sells}}</td>
-                    <td>{{total_sortie}}</td>
-                    <td>{{total_vendu}}</td>
-                    <td>{{total_retour}}</td>
-                    <td>{{total_credit}} GNF</td>
-                    <td>{{total_vente}} GNF</td>
+                <tr>
+                    <td>Total:</td>
+                    <td>{{ total_out }}</td>
+                    <td>{{ total_out }}</td>
+                    <td>{{ total_sold_units }}</td>
+                    <td>{{ total_retour }}</td>
+                    <td>{{ total_credit }} GNF</td>
+                    <td>{{ total_sales }} GNF</td>
+                </tr>
         </tbody>
     </table>
-    <h5>les depenses du jours</h5>
-    <table class="table table-striped">
+
+    <h5>Dépenses du jour</h5>
+    <table class="table">
         <thead>
             <tr>
                 <th>Actif</th>
-                <th>Type de depense</th>
-                <th>Details</th>
+                <th>Type de dépense</th>
+                <th>Détails</th>
                 <th>Somme en GNF</th>
             </tr>
         </thead>
-
         <tbody>
             {% for vente in spends_data %}
                 <tr>
@@ -134,20 +122,17 @@
                     <td>{{ vente.type_depense }}</td>
                     <td>{{ vente.detail }}</td>
                     <td>{{ vente.Somme_gnf }} GNF</td>
-
-
                 </tr>
-
             {% endfor %}
-            <td></td>
-            <td></td>
-            <td>Total</td>
-            <td>{{total_spends }} GNF</td>
+                <tr>
+                    <td colspan="3">Total Dépenses</td>
+                    <td>{{ total_spends }} GNF</td>
+                </tr>
         </tbody>
     </table>
 
     <div class="footer">
-        <p><strong>Recette:</strong> {{total}} GNF</p>
+        <p><strong>Recette Net:</strong> {{ total_revenue }} GNF</p>
     </div>
 </div>
 

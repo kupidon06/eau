@@ -7,17 +7,17 @@ class pers(models.Model):
     how={('Pourcentage',('Pourcentage')),('Salarié',('salarié'))}
     Nom=models.CharField(max_length=500,null=True)
     Prenom=models.CharField(max_length=500,null=True)
-    Telephone=models.CharField(max_length=500,null=True)
-    mail=models.CharField(max_length=500,null=True)
+    Telephone=models.CharField(max_length=500,null=True,blank=True)
+    mail=models.CharField(max_length=500,null=True,blank=True)
     situation=models.CharField(max_length=500,null=True,choices=situation)
     poste=models.CharField(max_length=200,null=True,choices=place)
     salaire=models.CharField(max_length=200,null=True)
     regime=models.CharField(max_length=200,null=True,choices=how)
-    identité=models.ImageField(null=True,upload_to='.')
+    identité=models.ImageField(null=True,upload_to='media/')
     def __str__(self):
         return self.Nom
 
 
 
 
-   
+

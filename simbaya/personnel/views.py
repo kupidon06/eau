@@ -10,15 +10,15 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url='/admin/login')
 def personnel(request):
     form=personnels()
-    
+
     if request.method=='POST':
-        form=personnels(request.POST)
+        form=personnels(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('liste_personnel')
-    
-   
-    
+
+
+
     context={'form':form,}
 
     return render (request,'personnel/personnel.html',context)
@@ -27,22 +27,22 @@ def personnel(request):
 @login_required(login_url='/admin/login')
 def fichier(request, pk):
     perso = pers.objects.get(id=pk)
-  
+
     data = pers.objects.filter(id=pk)
     nom=data.first().Nom
     prenom=data.first().Prenom
     num=data.first().Telephone
     poste=data.first().poste
     salaire=data.first().salaire
-    
+
 
 
     #-------------------------------------------------------------------------------------------
-    
-    #-----------------------------------------------------------------------------------------------------
-   
 
-   
+    #-----------------------------------------------------------------------------------------------------
+
+
+
     context = {'nom':nom,'prenom':prenom,'num':num,'poste':poste,'salaire':salaire}
     return render(request, 'personnel/print.html', context)
 @login_required(login_url='/admin/login')
@@ -62,8 +62,8 @@ def update(request,pk):
             form.save(request)
             return redirect('liste_personnel')
     context={'form':form}
-    
-   
+
+
     return render(request,'personnel/personnel.html',context)
 
 @login_required(login_url='/admin/login')
