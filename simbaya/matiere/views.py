@@ -18,7 +18,7 @@ def ajout(request):
 
 def stock(request):
     # Vue pour afficher la liste des ventes pour une date spécifique
-    data = Matiere.objects.all()
+    data = Matiere.objects.all().order_by('-date')
     context = {'data': data}
     return render(request, 'production/matiere.html', context)
 
@@ -42,4 +42,3 @@ def remove(request, pk):
     return redirect('list_production')
 
 
-    

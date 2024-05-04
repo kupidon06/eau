@@ -32,7 +32,7 @@ def ventes(request):
 def fichier(request, pk):
     spends = spend.objects.filter(date=pk)
     sales = sell.objects.filter(date=pk)
-    production_day = production.objects.filter(date=pk).first()
+    production_day = production.objects.filter(date=pk).last()
 
     # Calcul des totaux pour les ventes
     total_sales = sales.aggregate(Sum('Somme_gnf'))['Somme_gnf__sum'] or 0

@@ -1,49 +1,27 @@
-# signals.py
+# production/signals.py
 
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db.models import Sum
-from .models import production
 from vente.models import sell
+from .models import production
 
 @receiver(post_save, sender=sell)
-def mettre_a_jour_production(sender, instance, created, **kwargs):
-    # If the instance is created, update the production model
-    if created:
-        date = instance.date
-        somme_sorties = sell.objects.filter(date=date).aggregate(Sum('sortie'))['sortie__sum'] or 0
+def update_production_on_save(sender, instance, created, **kwargs):
+    update_production(instance)
 
-        # Get or create the production object for the given date
-        production_obj, _ = production.objects.get_or_create(date=date)
+@receiver(post_delete, sender=sell)
+def update_production_on_delete(sender, instance, **kwargs):
+    update_production(instance)
 
-        # Update the production object with the sum of outputs
-       
-        production_obj.sortie = somme_sorties
+def update_production(instance):
+    date = instance.date
+    somme_sorties = sell.objects.filter(date=date).aggregate(Sum('vendu'))['vendu__sum'] or 0
+    retourner_sorties = sell.objects.filter(date=date).aggregate(Sum('retourner'))['retourner__sum'] or 0
+    somme_sorties-=retourner_sorties
 
-        # Save the updated production object
-        production_obj.save()
 
-    else:  # If the instance is not created, handle the update logic
-        date = instance.date
-        somme_sorties = sell.objects.filter(date=date).aggregate(Sum('sortie'))['sortie__sum'] or 0
 
-        # Try to get the existing production object for the given date
-        try:
-            production_obj = production.objects.get(date=date)
-        except production.DoesNotExist:
-            # If the production object does not exist, create it
-            production_obj = production.objects.create(
-                date=date,
-                initiale=0,
-                nombre_emballage=0,
-                nombre_roulaux=0,
-                poids=1,
-                produit=0,
-                sortie=somme_sorties
-            )
-
-        # Update the production object with the sum of outputs
-        production_obj.sortie = somme_sorties
-
-        # Save the updated production object
-        production_obj.save()
+    production_obj, created = production.objects.get_or_create(date=date)
+    production_obj.sortie = somme_sorties
+    production_obj.save()

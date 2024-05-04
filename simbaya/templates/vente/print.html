@@ -59,7 +59,7 @@
 
 <div class="pay-slip">
     <div class="header">
-        <h4>Entreprise fatim distribution sarlu <br> propriétaire exclusive<br>622-22-07-22</h4>
+        <h4>Entreprise fatim distribution sarlu <br> propriétaire exclusive<br>Tél:+224 622-45-14-85/620-82-48-40<br>Quartier Simbaya -C/Ratoma</h4>
         <p><strong>Date:</strong> {{ date }}</p>
         <div class="vert">
             <p><strong>Initiale: {{ initial }}</strong></p>
@@ -110,7 +110,6 @@
         <thead>
             <tr>
                 <th>Actif</th>
-                <th>Type de dépense</th>
                 <th>Détails</th>
                 <th>Somme en GNF</th>
             </tr>
@@ -119,13 +118,12 @@
             {% for vente in spends_data %}
                 <tr>
                     <td>{{ vente.actif }}</td>
-                    <td>{{ vente.type_depense }}</td>
                     <td>{{ vente.detail }}</td>
                     <td>{{ vente.Somme_gnf }} GNF</td>
                 </tr>
             {% endfor %}
                 <tr>
-                    <td colspan="3">Total Dépenses</td>
+                    <td colspan="2">Total Dépenses</td>
                     <td>{{ total_spends }} GNF</td>
                 </tr>
         </tbody>

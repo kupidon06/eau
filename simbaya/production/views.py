@@ -22,8 +22,8 @@ def produite(request):
 @login_required(login_url='/admin/login')
 def list_production(request):
     # Vue pour afficher la liste des ventes pour une date spécifique
-  
-    data = production.objects.all()
+
+    data = production.objects.all().order_by('-date')
     context = {'data': data}
     return render(request, 'production/list.html', context)
 
@@ -57,7 +57,7 @@ def recherche(request):
 
     if reshearch:
         donnée = donnée.filter(date__icontains=reshearch)
-        
+
         # Si des données sont trouvées après la recherche, rediriger vers la première date trouvé
 
     context = {'datap': donnée}

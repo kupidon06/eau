@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-2!x^nx%*g+d02&!ewq%f+x=ug%*#x!z9oc7ojk-$i2e!wc!_5e'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['simbaya.pythonanywhere.com']
 

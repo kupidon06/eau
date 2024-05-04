@@ -5,7 +5,8 @@ from depenses.models import spend
 from matiere.models import Matiere
 from django.utils import timezone
 from django.db.models import Sum, Avg
-from django.db.models.functions import TruncDay
+from django.db.models.functions import TruncDay,TruncMonth
+from dateutil.relativedelta import relativedelta
 from django.shortcuts import render
 import json
 from django.contrib.auth.decorators import login_required
@@ -23,13 +24,22 @@ def ventes_mois_en_cours(request):
         date__year=annee_en_cours
     ).values('Vehicule').annotate(total_ventes=Sum('vendu'))
     vehicle_sales_data = json.dumps(list(ventes_mois_en_cours))
+    today = timezone.now()
+    three_months_ago = today - relativedelta(months=3)
+    start_date = three_months_ago.replace(day=1)
+    end_date = today.replace(day=1) - timezone.timedelta(days=1)
 
-    # Get profitability data with date formatted
     rentabilite = production.objects.filter(
-        date__month=mois_en_cours,
-        date__year=annee_en_cours
-    ).annotate(day=TruncDay('date')).values('day').annotate(renta=Avg('rentabilité'))
-    rentabilite_data = [{'date': item['day'].strftime('%Y-%m-%d'), 'renta': item['renta']} for item in rentabilite]
+        date__gte=start_date,
+        date__lte=end_date
+    ).annotate(month=TruncMonth('date')).values('month').annotate(avg_renta=Avg('rentabilité')).order_by('month')
+
+    rentabilite_data = [
+        {'month': item['month'].strftime('%Y-%m'), 'avg_renta': round(item['avg_renta'], 2) if item['avg_renta'] else 0}
+        for item in rentabilite
+    ]
+
+    overall_average_profitability = sum(item['avg_renta'] for item in rentabilite_data) / len(rentabilite_data) if rentabilite_data else 0
     profitability_data = json.dumps(rentabilite_data)
 
     # Calculate the average profitability
@@ -48,6 +58,11 @@ def ventes_mois_en_cours(request):
         date__year=annee_en_cours
     ).aggregate(depensé=Sum('Somme_gnf'))['depensé'] or 0
 
+
+    vente_j = sell.objects.filter(
+        date=today
+    ).aggregate(vente=Sum('Somme_gnf'))['vente'] or 0
+
     # Quantity at the factory for the current day
     factory_quantity_today = production.objects.filter(date=today.date()).first()
     factory_quantity_today_value = factory_quantity_today.usine if factory_quantity_today else 0
@@ -65,6 +80,7 @@ def ventes_mois_en_cours(request):
         'profitability_data': profitability_data,
         'average_profitability': average_profitability,
         'vente': vente,
+        'vente_j': vente_j,
         'depense': depense,
         'rapport': vente - depense,
         'stock_r': stock_r,
@@ -168,7 +184,7 @@ def recherche(request):
     # Calculer les totaux des ventes et dépenses pour le mois
     recapitulatif_vente = ventes_par_vehicule.values('date').annotate(total_vente=Sum('Somme_gnf')).order_by('date')
     recapitulatif_depense = depenses_par_vehicule.values('date').annotate(total_depense=Sum('Somme_gnf')).order_by('date')
-    
+
     somme_vente = recapitulatif_vente.aggregate(total_vente_mois=Sum('total_vente'))['total_vente_mois'] or 0
     somme_depense = recapitulatif_depense.aggregate(total_depense_mois=Sum('total_depense'))['total_depense_mois'] or 0
     benefice = somme_vente - somme_depense
@@ -176,5 +192,5 @@ def recherche(request):
 
     context = {'vente': recapitulatif_vente, 'depenses': recapitulatif_depense,
                'mois_vente': somme_vente, 'v':vehicule,'mois_depense': somme_depense, 'benef': benefice}
-    
+
     return render(request, 'home/details.html', context)
